@@ -1,0 +1,6 @@
+env: dev
+env_path: "./internal/config/.env"
+storage_path: "internal/storage"
+
+birthday_group_id: 000
+group_owner_id: 000
