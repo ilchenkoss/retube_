@@ -75,8 +75,7 @@ func (bs *BirthdayService) kickUsers(ctx context.Context, usersToKick *[]domain.
 	op := "birthdayService.kickUsers"
 	bs.log.With(slog.String("op", op))
 
-	//timeToKick := time.NewTimer(12 * time.Hour)
-	timeToKick := time.NewTimer(30 * time.Second)
+	timeToKick := time.NewTimer(12 * time.Hour)
 
 	defer func() {
 		for _, user := range *usersToKick {

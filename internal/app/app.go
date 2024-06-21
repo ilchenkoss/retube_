@@ -78,10 +78,6 @@ func MustNew(ctx context.Context, log *slog.Logger, cfg config.Config) {
 	go telegram.NewRouter(ctx, &wg, log, &tgHandlers, tg)
 	go func() {
 
-		//.TODO remove this
-		wg.Add(1)
-		go birthdayService.BirthdayNotify(ctx, &wg)
-
 		//auto check birthdays every day in 8:00AM
 		now := time.Now()
 		nextUpdate := time.Date(now.Year(), now.Month(), now.Day(), 8, 0, 0, 0, now.Location())
@@ -100,8 +96,8 @@ func MustNew(ctx context.Context, log *slog.Logger, cfg config.Config) {
 			case <-ctx.Done():
 				return
 			case <-ticker.C:
-				//wg.Add(1)
-				//go birthdayService.BirthdayNotify(ctx, &wg)
+				wg.Add(1)
+				go birthdayService.BirthdayNotify(ctx, &wg)
 			}
 		}
 	}()
