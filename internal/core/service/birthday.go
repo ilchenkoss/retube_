@@ -45,7 +45,7 @@ func (bs *BirthdayService) BirthdayNotify(ctx context.Context, wg *sync.WaitGrou
 
 	subscribers, gsuErr := bs.ur.GetUsersSubscribedToUsers(birthdayUsers)
 	if gsuErr != nil {
-		bs.log.Error("GetUsersSubscribedToUsers error from birthdayUsers: ", "error", birthdayUsers, gsuErr.Error())
+		bs.log.Error("GetUsersSubscribedToUsers error from birthdayUsers: ", "error", birthdayUsers, gsuErr)
 		return
 	}
 	if len(*subscribers) == 0 && len(*birthdayUsers) == 1 {
@@ -75,7 +75,7 @@ func (bs *BirthdayService) kickUsers(ctx context.Context, usersToKick *[]domain.
 	op := "birthdayService.kickUsers"
 	bs.log.With(slog.String("op", op))
 
-	timeToKick := time.NewTimer(12 * time.Hour)
+	timeToKick := time.NewTimer(bs.cfg.TimeToKick)
 
 	defer func() {
 		for _, user := range *usersToKick {
@@ -88,7 +88,6 @@ func (bs *BirthdayService) kickUsers(ctx context.Context, usersToKick *[]domain.
 				bs.tg.SendMessage(user.TelegramID, "please, leave from group. We'll wait for next birthday")
 			}
 		}
-		timeToKick.Stop()
 	}()
 
 	for {
@@ -96,6 +95,7 @@ func (bs *BirthdayService) kickUsers(ctx context.Context, usersToKick *[]domain.
 		case <-ctx.Done():
 			return
 		case <-timeToKick.C:
+			timeToKick.Stop()
 			return
 		}
 	}
@@ -106,7 +106,6 @@ func (bs *BirthdayService) sendInviteForUsers(usersForSendInvite *[]domain.User,
 	bs.log.With(slog.String("op", op))
 
 	inviteLink, ilErr := bs.tg.GetInviteLink(bs.cfg.BirthdayGroupID, birthdayUsers)
-
 	if ilErr != nil {
 		bs.log.Error("error generate invite link", "error", ilErr)
 		inviteLink = fmt.Sprintf("to invite birthday group with users celebrating: %s, contact support", birthdayUsers)

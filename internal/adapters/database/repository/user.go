@@ -147,7 +147,7 @@ func (u *UserRepository) GetUserByUsername(user *domain.User) (*domain.User, err
 	err := row.Scan(&uUser.ID, &uUser.Username, &uUser.TelegramID, &uUser.Birthday, &uUser.NotifyBirthday)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, fmt.Errorf("username %d: %w", user.Username, domain.ErrNotFound)
+			return nil, fmt.Errorf("username %s: %w", user.Username, domain.ErrNotFound)
 		}
 		return nil, fmt.Errorf("error get user by username: %w", err)
 	}

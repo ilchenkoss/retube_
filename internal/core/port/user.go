@@ -2,6 +2,8 @@ package port
 
 import "birthdayapp/internal/core/domain"
 
+//go:generate mockgen -source=./user.go -destination=mock/user.go -package=mock
+
 type UserRepo interface {
 	InsertUser(user *domain.User) (*domain.User, error)
 	InsertUsers(users *[]domain.User) error

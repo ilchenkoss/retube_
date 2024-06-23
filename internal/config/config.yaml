@@ -4,3 +4,5 @@ storage_path: "internal/storage"
 
 birthday_group_id: 000
 group_owner_id: 000
+
+time_to_kick: 12h

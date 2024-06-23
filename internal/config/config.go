@@ -6,6 +6,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/joho/godotenv"
 	"os"
+	"time"
 )
 
 const (
@@ -13,11 +14,12 @@ const (
 )
 
 type Config struct {
-	Env             string `yaml:"env"`
-	EnvPath         string `yaml:"env_path"`
-	StoragePath     string `yaml:"storage_path"`
-	BirthdayGroupID int64  `yaml:"birthday_group_id"`
-	GroupOwnerID    int64  `yaml:"group_owner_id"`
+	Env             string        `yaml:"env"`
+	EnvPath         string        `yaml:"env_path"`
+	StoragePath     string        `yaml:"storage_path"`
+	BirthdayGroupID int64         `yaml:"birthday_group_id"`
+	GroupOwnerID    int64         `yaml:"group_owner_id"`
+	TimeToKick      time.Duration `yaml:"time_to_kick"`
 }
 
 func LoadConfig() (*Config, error) {
